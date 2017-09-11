@@ -2,6 +2,7 @@ package com.kripesh.krima.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,10 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
+import javax.persistence.JoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -26,6 +29,12 @@ public class User {
 	private String lastName;
 	private String userName;
 	private String password;
+	private String email;
+	private boolean active;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
 	
 	@CreationTimestamp
 	private Date created;
@@ -101,4 +110,27 @@ public class User {
 		this.likedPhotoList = likedPhotoList;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 }
