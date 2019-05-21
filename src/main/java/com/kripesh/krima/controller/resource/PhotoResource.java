@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kripesh.krima.property.FileStorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,12 @@ import com.kripesh.krima.service.PhotoService;
 public class PhotoResource {
 
 	private String imageName;
-	
+
 	@Autowired
 	private PhotoService photoService;
+
+	@Autowired
+    private FileStorageProperties fileStorageProperties;
 	
 	@RequestMapping(value="/photo/upload", method = RequestMethod.POST)
 	public String upload(HttpServletResponse response, HttpServletRequest request) {
@@ -38,7 +42,7 @@ public class PhotoResource {
         imageName=fileName;
 
         //src/main/resources     target/classes
-        String path = new File("src/main/resources/static/images").getAbsolutePath()+"\\"+fileName;
+        String path = new File(fileStorageProperties.getUploadDir()).getAbsolutePath()+"\\"+fileName;
         try {
             multipartFile.transferTo(new File(path));
             System.out.println(path);
